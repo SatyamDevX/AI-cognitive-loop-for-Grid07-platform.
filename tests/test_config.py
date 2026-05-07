@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import types
@@ -132,7 +133,56 @@ class ConfigTest(unittest.TestCase):
         self.assertTrue(captured["api_key_set"])
         self.assertEqual(captured["thinking_budget"], 0)
         self.assertEqual(captured["generate_config"]["response_mime_type"], "application/json")
-        self.assertEqual(captured["generate_config"]["max_output_tokens"], 120)
+        self.assertEqual(captured["generate_config"]["max_output_tokens"], 90)
+
+    def test_gemini_post_generation_trims_long_post_content(self) -> None:
+        captured = {}
+        long_post = "x" * 320
+
+        class FakeThinkingConfig:
+            def __init__(self, thinking_budget: int) -> None:
+                captured["thinking_budget"] = thinking_budget
+
+        class FakeGenerateContentConfig:
+            def __init__(self, **kwargs) -> None:
+                captured["generate_config"] = kwargs
+
+        class FakeModels:
+            def generate_content(self, **kwargs):
+                return types.SimpleNamespace(
+                    text=json.dumps(
+                        {
+                            "bot_id": "bot_b",
+                            "topic": "AI labor displacement and tech monopoly power",
+                            "post_content": long_post,
+                        }
+                    )
+                )
+
+        class FakeClient:
+            def __init__(self, api_key: str | None = None) -> None:
+                self.models = FakeModels()
+
+        fake_google = types.ModuleType("google")
+        fake_genai = types.ModuleType("google.genai")
+        fake_types = types.SimpleNamespace(
+            GenerateContentConfig=FakeGenerateContentConfig,
+            ThinkingConfig=FakeThinkingConfig,
+        )
+        fake_genai.Client = FakeClient
+        fake_genai.types = fake_types
+        fake_google.genai = fake_genai
+
+        with patch.dict(sys.modules, {"google": fake_google, "google.genai": fake_genai}):
+            result = generate_gemini_post(
+                AppConfig(llm_provider="gemini", gemini_api_key="secret"),
+                find_persona_by_id("bot_b"),
+                "AI labor displacement and tech monopoly power",
+                "OpenAI releases a faster coding model.",
+            )
+
+        self.assertLessEqual(len(result["post_content"]), 280)
+        self.assertTrue(result["post_content"].endswith("..."))
 
 
 if __name__ == "__main__":

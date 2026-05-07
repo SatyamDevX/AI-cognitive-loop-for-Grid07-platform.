@@ -60,7 +60,7 @@ Live Gemini drafting, only when `.env` is configured:
 python3 -m grid07_ai_agent.cli generate-live-post bot_b
 ```
 
-This command makes one Gemini request with JSON mode, `max_output_tokens=120`, and `thinking_budget=0`.
+This command makes one Gemini request with JSON mode, `max_output_tokens=90`, and `thinking_budget=0`.
 
 ## Run Phase 3
 

@@ -121,7 +121,7 @@ def generate_gemini_post(
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
-            max_output_tokens=120,
+            max_output_tokens=90,
             temperature=0.4,
             candidate_count=1,
             thinking_config=types.ThinkingConfig(thinking_budget=0),
@@ -134,7 +134,8 @@ def _build_gemini_post_prompt(bot: BotPersona, topic: str, search_results: str) 
     return (
         "Create one highly opinionated social post for this bot persona.\n"
         "Return only strict JSON with exactly these keys: bot_id, topic, post_content.\n"
-        "Rules: post_content must be 280 characters or fewer. No markdown. No extra keys.\n\n"
+        "Rules: post_content must be 220 characters or fewer. No markdown. No extra keys. "
+        "Do not include the search context verbatim.\n\n"
         f"bot_id: {bot.bot_id}\n"
         f"persona name: {bot.name}\n"
         f"persona: {bot.description}\n"
@@ -154,9 +155,9 @@ def _parse_generated_post_json(raw_text: str, expected_bot_id: str) -> dict[str,
         raise ValueError(f"Gemini JSON must contain exactly {sorted(required_keys)}")
     if payload["bot_id"] != expected_bot_id:
         raise ValueError(f"Gemini returned unexpected bot_id: {payload['bot_id']!r}")
-    if len(payload["post_content"]) > 280:
-        raise ValueError("Gemini post_content exceeds 280 characters")
     for key in required_keys:
         if not isinstance(payload[key], str) or not payload[key].strip():
             raise ValueError(f"Gemini field is empty: {key}")
+    if len(payload["post_content"]) > 280:
+        payload["post_content"] = payload["post_content"][:277].rstrip() + "..."
     return payload
