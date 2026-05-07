@@ -167,3 +167,48 @@ Ran 9 tests in 0.011s
 
 OK
 ```
+
+## Milestone 4: Config And Provider Readiness
+
+Command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m grid07_ai_agent.cli config-check
+```
+
+Output:
+
+```json
+{
+  "config": {
+    "llm_provider": "local",
+    "provider_ready": true,
+    "openai_api_key_set": false,
+    "groq_api_key_set": false,
+    "ollama_base_url": "http://localhost:11434",
+    "messages": []
+  },
+  "llm_provider_plan": {
+    "provider": "local",
+    "package": null,
+    "model_family": "Deterministic local prototype",
+    "ready": true
+  }
+}
+```
+
+Test command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m unittest discover -s tests
+```
+
+Result:
+
+```text
+Ran 12 tests in 0.017s
+
+OK
+```

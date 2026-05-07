@@ -62,6 +62,14 @@ python -m grid07_ai_agent.cli defend-thread bot_a
 
 The defense workflow builds a RAG-style prompt with the parent post, comment history, and latest human reply. User-controlled thread text is treated as untrusted data, so prompt-injection attempts are rejected while the bot stays in persona.
 
+## Check Config
+
+```bash
+python3 -m grid07_ai_agent.cli config-check
+```
+
+To enable a hosted model later, copy `.env.example` to `.env`, set `LLM_PROVIDER`, and add the matching API key manually. The config check only prints whether keys are present; it never prints secret values.
+
 ## Test
 
 ```powershell
@@ -75,6 +83,7 @@ python -m unittest discover -s tests
 - Public APIs are kept narrow: `route_post_to_bots(post_content: str, threshold: float = 0.85)` is the main assignment function.
 - Phase 2 exposes `generate_opinionated_post(bot_id: str)` and validates the required JSON keys: `bot_id`, `topic`, and `post_content`.
 - Phase 3 exposes `generate_defense_reply(...)` and `build_defense_prompt(...)` for future LLM-backed replies.
+- Runtime config is loaded from `.env` when available and can be inspected with `config-check` without exposing secrets.
 - Tests use Python `unittest` so the first milestone can run without installing a test framework.
 
 ## Milestone Status

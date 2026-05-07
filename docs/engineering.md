@@ -118,6 +118,8 @@ Validation:
 - Full test suite.
 - Manual end-to-end smoke run across all phases.
 
+Status: in progress. Config loading and secret-safe provider readiness checks are implemented first; actual network-backed LLM calls remain manual-key gated.
+
 ## Milestone 1 Notes
 
 The first milestone intentionally avoids network calls and paid APIs. Its embedding model is not a replacement for production embeddings; it is a deterministic prototype that preserves the assignment's cosine-similarity contract and can be swapped behind the same router interface. The assignment function keeps `threshold=0.85`, while local demos use `0.35` because the prototype concept vectors are sparse compared with production sentence embeddings.
