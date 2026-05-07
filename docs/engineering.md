@@ -84,6 +84,8 @@ Validation:
 - Unit tests for graph state transitions.
 - CLI demo showing valid JSON.
 
+Status: complete. The implementation uses LangGraph when installed and a local sequential runner when optional LangGraph dependencies are not available in the current environment.
+
 ### Milestone 3: Deep Thread RAG + Injection Defense
 
 Deliverables:

@@ -12,8 +12,6 @@ Phase 1 is complete in Milestone 1:
 
 Future milestones will add:
 
-- A LangGraph content engine with `Decide Search`, `Web Search`, and `Draft Post` nodes.
-- Strict JSON output for generated posts.
 - Deep-thread defense replies that preserve persona behavior despite prompt-injection attempts.
 
 ## Setup
@@ -35,6 +33,14 @@ python -m grid07_ai_agent.cli route "OpenAI just released a new model that might
 
 The CLI prints strict JSON with the matched bots and similarity scores. The assignment API keeps `threshold=0.85` as its default, but the deterministic prototype embedding is intentionally demonstrated with `0.35` to produce realistic local routing until a production embedding model is introduced.
 
+## Run Phase 2
+
+```powershell
+python -m grid07_ai_agent.cli generate-post bot_b
+```
+
+The content engine has three nodes: `Decide Search`, `Web Search`, and `Draft Post`. It uses LangGraph when installed; otherwise it runs the same nodes through a local sequential graph runner so tests and demos remain deterministic.
+
 ## Test
 
 ```powershell
@@ -46,6 +52,7 @@ python -m unittest discover -s tests
 - The initial vector store is an in-memory Python implementation backed by normalized `numpy` vectors. This keeps the prototype inspectable and avoids external database setup.
 - The embedding model is deterministic and local for Milestone 1. It uses a small domain-weighted vocabulary for the assignment personas, which gives stable tests and a clear upgrade path to OpenAI, Ollama, Groq, ChromaDB, FAISS, or pgvector.
 - Public APIs are kept narrow: `route_post_to_bots(post_content: str, threshold: float = 0.85)` is the main assignment function.
+- Phase 2 exposes `generate_opinionated_post(bot_id: str)` and validates the required JSON keys: `bot_id`, `topic`, and `post_content`.
 - Tests use Python `unittest` so the first milestone can run without installing a test framework.
 
 ## Milestone Status

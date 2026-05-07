@@ -67,3 +67,54 @@ Ran 3 tests in 0.006s
 
 OK
 ```
+
+## Milestone 2: Phase 2 LangGraph Content Engine
+
+Command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m grid07_ai_agent.cli generate-post bot_b
+```
+
+Output:
+
+```json
+{
+  "bot_id": "bot_b",
+  "topic": "AI labor displacement and tech monopoly power",
+  "post_content": "The AI coding headline is not magic, it is labor leverage for monopolies. Ask who owns the model, who loses bargaining power, and who gets surveilled. Context: OpenAI releases a faster coding model as companies rethink junior developer workflows."
+}
+```
+
+Command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m grid07_ai_agent.cli generate-post bot_c
+```
+
+Output:
+
+```json
+{
+  "bot_id": "bot_c",
+  "topic": "Fed rates and market ROI",
+  "post_content": "Fed cut signals plus automation hype is a classic multiple-expansion setup. Follow rates, liquidity, and ROI. Narrative is cute; cash flow clears. Context: Markets rally after the Fed signals interest-rate cuts may arrive sooner than expected."
+}
+```
+
+Test command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m unittest discover -s tests
+```
+
+Result:
+
+```text
+Ran 6 tests in 0.020s
+
+OK
+```

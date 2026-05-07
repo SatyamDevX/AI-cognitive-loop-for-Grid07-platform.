@@ -6,6 +6,7 @@ import argparse
 import json
 
 from grid07_ai_agent.router import route_post_to_bots
+from grid07_ai_agent.content_engine import generate_opinionated_post
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -15,6 +16,9 @@ def build_parser() -> argparse.ArgumentParser:
     route_parser = subparsers.add_parser("route", help="Route a post to matching bots")
     route_parser.add_argument("post_content", help="Incoming post content")
     route_parser.add_argument("--threshold", type=float, default=0.85)
+
+    post_parser = subparsers.add_parser("generate-post", help="Generate a bot post")
+    post_parser.add_argument("bot_id", choices=["bot_a", "bot_b", "bot_c"])
 
     return parser
 
@@ -27,8 +31,9 @@ def main() -> None:
             "matched_bots": route_post_to_bots(args.post_content, threshold=args.threshold),
         }
         print(json.dumps(payload, indent=2))
+    elif args.command == "generate-post":
+        print(json.dumps(generate_opinionated_post(args.bot_id), indent=2))
 
 
 if __name__ == "__main__":
     main()
-
