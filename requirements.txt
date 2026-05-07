@@ -1,0 +1,10 @@
+# Milestone 1 runs with Python standard library + numpy.
+numpy>=1.26
+
+# Planned for Milestone 2+.
+langchain>=0.3
+langgraph>=0.2
+langchain-openai>=0.2
+langchain-groq>=0.2
+python-dotenv>=1.0
+
