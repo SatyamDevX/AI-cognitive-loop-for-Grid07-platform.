@@ -8,9 +8,16 @@ from grid07_ai_agent.content_engine import (
 )
 
 
+def invoke_tool(tool, query: str) -> str:
+    invoke = getattr(tool, "invoke", None)
+    if invoke is not None:
+        return invoke(query)
+    return tool(query)
+
+
 class ContentEngineTest(unittest.TestCase):
     def test_mock_search_returns_keyword_specific_news(self) -> None:
-        result = mock_searxng_search("crypto bitcoin ETF")
+        result = invoke_tool(mock_searxng_search, "crypto bitcoin ETF")
 
         self.assertIn("Bitcoin", result)
         self.assertIn("ETF", result)
