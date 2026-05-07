@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-SUPPORTED_LLM_PROVIDERS = {"local", "openai", "groq", "ollama"}
+SUPPORTED_LLM_PROVIDERS = {"local", "openai", "groq", "gemini", "ollama"}
 
 
 @dataclass(frozen=True)
@@ -17,6 +17,7 @@ class AppConfig:
     llm_provider: str = "local"
     openai_api_key: str | None = None
     groq_api_key: str | None = None
+    gemini_api_key: str | None = None
     ollama_base_url: str = "http://localhost:11434"
 
     @property
@@ -25,6 +26,8 @@ class AppConfig:
             return bool(self.openai_api_key)
         if self.llm_provider == "groq":
             return bool(self.groq_api_key)
+        if self.llm_provider == "gemini":
+            return bool(self.gemini_api_key)
         return True
 
     def validation_messages(self) -> list[str]:
@@ -38,6 +41,8 @@ class AppConfig:
             messages.append("OPENAI_API_KEY is required when LLM_PROVIDER=openai.")
         if self.llm_provider == "groq" and not self.groq_api_key:
             messages.append("GROQ_API_KEY is required when LLM_PROVIDER=groq.")
+        if self.llm_provider == "gemini" and not self.gemini_api_key:
+            messages.append("GEMINI_API_KEY is required when LLM_PROVIDER=gemini.")
         if self.llm_provider == "ollama" and not self.ollama_base_url:
             messages.append("OLLAMA_BASE_URL is required when LLM_PROVIDER=ollama.")
         return messages
@@ -51,6 +56,7 @@ def load_config(env_path: str | Path = ".env") -> AppConfig:
         llm_provider=os.getenv("LLM_PROVIDER", "local").strip().lower(),
         openai_api_key=_optional_env("OPENAI_API_KEY"),
         groq_api_key=_optional_env("GROQ_API_KEY"),
+        gemini_api_key=_optional_env("GEMINI_API_KEY"),
         ollama_base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").strip(),
     )
 
@@ -64,6 +70,7 @@ def config_status(config: AppConfig) -> dict[str, object]:
         "provider_ready": not messages and config.is_provider_ready,
         "openai_api_key_set": bool(config.openai_api_key),
         "groq_api_key_set": bool(config.groq_api_key),
+        "gemini_api_key_set": bool(config.gemini_api_key),
         "ollama_base_url": config.ollama_base_url,
         "messages": messages,
     }
@@ -82,4 +89,3 @@ def _load_dotenv_if_available(env_path: str | Path) -> None:
     except ImportError:
         return
     load_dotenv(dotenv_path=env_path, override=False)
-

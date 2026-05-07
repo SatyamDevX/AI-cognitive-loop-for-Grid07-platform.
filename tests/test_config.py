@@ -28,6 +28,12 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(plan.package, "langchain-groq")
         self.assertTrue(plan.ready)
 
+    def test_gemini_requires_key(self) -> None:
+        config = AppConfig(llm_provider="gemini")
+
+        self.assertIn("GEMINI_API_KEY is required", config.validation_messages()[0])
+        self.assertFalse(config_status(config)["provider_ready"])
+
 
 if __name__ == "__main__":
     unittest.main()

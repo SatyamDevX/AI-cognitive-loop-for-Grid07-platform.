@@ -6,7 +6,7 @@ import argparse
 import json
 
 from grid07_ai_agent.config import config_status, load_config
-from grid07_ai_agent.llm import describe_llm_provider
+from grid07_ai_agent.llm import describe_llm_provider, run_gemini_smoke_test
 from grid07_ai_agent.router import route_post_to_bots
 from grid07_ai_agent.content_engine import generate_opinionated_post
 from grid07_ai_agent.personas import find_persona_by_id
@@ -32,6 +32,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     subparsers.add_parser("config-check", help="Show secret-safe runtime config status")
+
+    gemini_parser = subparsers.add_parser(
+        "gemini-smoke-test",
+        help="Make one tiny Gemini API call to verify .env credentials",
+    )
+    gemini_parser.add_argument("--model", default="gemini-2.5-flash")
 
     return parser
 
@@ -70,6 +76,8 @@ def main() -> None:
             "llm_provider_plan": provider_plan.__dict__,
         }
         print(json.dumps(payload, indent=2))
+    elif args.command == "gemini-smoke-test":
+        print(json.dumps(run_gemini_smoke_test(load_config(), model=args.model), indent=2))
 
 
 if __name__ == "__main__":

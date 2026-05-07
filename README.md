@@ -70,6 +70,29 @@ python3 -m grid07_ai_agent.cli config-check
 
 To enable a hosted model later, copy `.env.example` to `.env`, set `LLM_PROVIDER`, and add the matching API key manually. The config check only prints whether keys are present; it never prints secret values.
 
+Gemini setup:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` manually:
+
+```text
+LLM_PROVIDER=gemini
+GEMINI_API_KEY=your_key_here
+```
+
+Then run:
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 -m grid07_ai_agent.cli config-check
+python3 -m grid07_ai_agent.cli gemini-smoke-test
+```
+
+`gemini-smoke-test` makes one tiny request with `max_output_tokens=3`; use it only when you intentionally want to test the key.
+
 ## Test
 
 ```powershell
@@ -83,7 +106,7 @@ python -m unittest discover -s tests
 - Public APIs are kept narrow: `route_post_to_bots(post_content: str, threshold: float = 0.85)` is the main assignment function.
 - Phase 2 exposes `generate_opinionated_post(bot_id: str)` and validates the required JSON keys: `bot_id`, `topic`, and `post_content`.
 - Phase 3 exposes `generate_defense_reply(...)` and `build_defense_prompt(...)` for future LLM-backed replies.
-- Runtime config is loaded from `.env` when available and can be inspected with `config-check` without exposing secrets.
+- Runtime config is loaded from `.env` when available and can be inspected with `config-check` without exposing secrets. Gemini uses the official `google-genai` SDK.
 - Tests use Python `unittest` so the first milestone can run without installing a test framework.
 
 ## Milestone Status

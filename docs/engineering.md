@@ -118,7 +118,7 @@ Validation:
 - Full test suite.
 - Manual end-to-end smoke run across all phases.
 
-Status: in progress. Config loading and secret-safe provider readiness checks are implemented first; actual network-backed LLM calls remain manual-key gated.
+Status: in progress. Config loading and secret-safe provider readiness checks are implemented first. Gemini has an explicit one-call smoke test with very small output tokens; broader network-backed LLM calls remain manual-key gated.
 
 ## Milestone 1 Notes
 

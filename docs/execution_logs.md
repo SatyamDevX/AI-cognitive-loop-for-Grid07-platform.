@@ -186,6 +186,7 @@ Output:
     "provider_ready": true,
     "openai_api_key_set": false,
     "groq_api_key_set": false,
+    "gemini_api_key_set": false,
     "ollama_base_url": "http://localhost:11434",
     "messages": []
   },

@@ -34,6 +34,13 @@ def describe_llm_provider(config: AppConfig) -> LLMProviderPlan:
             model_family="Groq-hosted chat model",
             ready=config.is_provider_ready,
         )
+    if config.llm_provider == "gemini":
+        return LLMProviderPlan(
+            provider="gemini",
+            package="google-genai",
+            model_family="Gemini API model",
+            ready=config.is_provider_ready,
+        )
     if config.llm_provider == "ollama":
         return LLMProviderPlan(
             provider="ollama",
@@ -48,3 +55,36 @@ def describe_llm_provider(config: AppConfig) -> LLMProviderPlan:
         ready=config.is_provider_ready,
     )
 
+
+def run_gemini_smoke_test(config: AppConfig, model: str = "gemini-2.5-flash") -> dict[str, object]:
+    """Make one tiny Gemini call to verify credentials and SDK wiring."""
+
+    if config.llm_provider != "gemini":
+        raise ValueError("Set LLM_PROVIDER=gemini before running the Gemini smoke test.")
+    messages = config.validation_messages()
+    if messages:
+        raise ValueError(" ".join(messages))
+
+    try:
+        from google import genai
+        from google.genai import types
+    except ImportError as exc:
+        raise RuntimeError("Install google-genai with `python3 -m pip install -r requirements.txt`.") from exc
+
+    client = genai.Client(api_key=config.gemini_api_key)
+    response = client.models.generate_content(
+        model=model,
+        contents="Reply with exactly one word: OK",
+        config=types.GenerateContentConfig(
+            max_output_tokens=3,
+            temperature=0.0,
+            candidate_count=1,
+        ),
+    )
+    return {
+        "provider": "gemini",
+        "model": model,
+        "prompt": "Reply with exactly one word: OK",
+        "max_output_tokens": 3,
+        "text": (response.text or "").strip(),
+    }
