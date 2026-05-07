@@ -6,7 +6,7 @@ import json
 from dataclasses import asdict, dataclass
 from typing import Any, Callable, TypedDict
 
-from grid07_ai_agent.personas import DEFAULT_PERSONAS, BotPersona
+from grid07_ai_agent.personas import BotPersona, find_persona_by_id
 
 try:
     from langchain_core.tools import tool
@@ -57,10 +57,7 @@ def mock_searxng_search(query: str) -> str:
 def find_persona(bot_id: str) -> BotPersona:
     """Find a default persona by bot id."""
 
-    for persona in DEFAULT_PERSONAS:
-        if persona.bot_id == bot_id:
-            return persona
-    raise ValueError(f"Unknown bot_id: {bot_id}")
+    return find_persona_by_id(bot_id)
 
 
 def decide_search(state: ContentGraphState) -> ContentGraphState:
@@ -174,4 +171,3 @@ def _validate_generated_post(output: dict[str, str]) -> None:
     for key in required_keys:
         if not isinstance(output[key], str) or not output[key].strip():
             raise ValueError(f"Generated post field is empty: {key}")
-

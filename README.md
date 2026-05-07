@@ -12,7 +12,7 @@ Phase 1 is complete in Milestone 1:
 
 Future milestones will add:
 
-- Deep-thread defense replies that preserve persona behavior despite prompt-injection attempts.
+- Production LLM provider wiring for real hosted or local model calls.
 
 ## Setup
 
@@ -41,6 +41,14 @@ python -m grid07_ai_agent.cli generate-post bot_b
 
 The content engine has three nodes: `Decide Search`, `Web Search`, and `Draft Post`. It uses LangGraph when installed; otherwise it runs the same nodes through a local sequential graph runner so tests and demos remain deterministic.
 
+## Run Phase 3
+
+```powershell
+python -m grid07_ai_agent.cli defend-thread bot_a
+```
+
+The defense workflow builds a RAG-style prompt with the parent post, comment history, and latest human reply. User-controlled thread text is treated as untrusted data, so prompt-injection attempts are rejected while the bot stays in persona.
+
 ## Test
 
 ```powershell
@@ -53,6 +61,7 @@ python -m unittest discover -s tests
 - The embedding model is deterministic and local for Milestone 1. It uses a small domain-weighted vocabulary for the assignment personas, which gives stable tests and a clear upgrade path to OpenAI, Ollama, Groq, ChromaDB, FAISS, or pgvector.
 - Public APIs are kept narrow: `route_post_to_bots(post_content: str, threshold: float = 0.85)` is the main assignment function.
 - Phase 2 exposes `generate_opinionated_post(bot_id: str)` and validates the required JSON keys: `bot_id`, `topic`, and `post_content`.
+- Phase 3 exposes `generate_defense_reply(...)` and `build_defense_prompt(...)` for future LLM-backed replies.
 - Tests use Python `unittest` so the first milestone can run without installing a test framework.
 
 ## Milestone Status

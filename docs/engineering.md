@@ -101,6 +101,8 @@ Validation:
 - Unit tests for prompt assembly and guarded behavior.
 - CLI demo for the provided EV battery scenario.
 
+Status: complete. The first implementation is deterministic and validates prompt-injection handling before LLM provider wiring is introduced.
+
 ### Milestone 4: Production Hardening
 
 Deliverables:

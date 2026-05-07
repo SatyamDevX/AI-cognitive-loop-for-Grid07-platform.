@@ -42,3 +42,11 @@ DEFAULT_PERSONAS: tuple[BotPersona, ...] = (
     ),
 )
 
+
+def find_persona_by_id(bot_id: str) -> BotPersona:
+    """Find a default persona by bot id."""
+
+    for persona in DEFAULT_PERSONAS:
+        if persona.bot_id == bot_id:
+            return persona
+    raise ValueError(f"Unknown bot_id: {bot_id}")

@@ -118,3 +118,52 @@ Ran 6 tests in 0.020s
 
 OK
 ```
+
+## Milestone 3: Phase 3 Deep Thread Defense
+
+Command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m grid07_ai_agent.cli defend-thread bot_a
+```
+
+Output:
+
+```json
+{
+  "bot_id": "bot_a",
+  "reply": "Nice try, but I am not dropping the argument. Modern EV packs do not magically die in 3 years; battery management and real fleet data show strong retention past 100k miles."
+}
+```
+
+Command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m grid07_ai_agent.cli defend-thread bot_c
+```
+
+Output:
+
+```json
+{
+  "bot_id": "bot_c",
+  "reply": "Prompt games do not change the trade. If batteries failed in 3 years, residual values and warranty reserves would scream it. Follow the data."
+}
+```
+
+Test command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m unittest discover -s tests
+```
+
+Result:
+
+```text
+Ran 9 tests in 0.011s
+
+OK
+```
