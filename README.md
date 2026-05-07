@@ -16,14 +16,27 @@ Future milestones will add:
 
 ## Setup
 
+WSL / Ubuntu:
+
+```bash
+cd /mnt/d/AI_Agents/1rag_ai_agent
+source .venv/bin/activate
+python3 -m pip install --upgrade pip setuptools wheel
+python3 -m pip install -r requirements.txt
+python3 -m pip install -e .
+```
+
+Windows PowerShell:
+
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-pip install -e .
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -r requirements.txt
+python -m pip install -e .
 ```
 
-For Milestone 1 only, `numpy` is the only runtime dependency. LLM provider keys are intentionally excluded; copy `.env.example` to `.env` when later milestones require them.
+Run install commands from the repository root, not from `src`. LLM provider keys are intentionally excluded; copy `.env.example` to `.env` when later milestones require them.
 
 ## Run Phase 1
 
