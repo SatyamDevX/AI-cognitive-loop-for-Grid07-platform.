@@ -79,6 +79,7 @@ def run_gemini_smoke_test(config: AppConfig, model: str = "gemini-2.5-flash") ->
             max_output_tokens=3,
             temperature=0.0,
             candidate_count=1,
+            thinking_config=types.ThinkingConfig(thinking_budget=0),
         ),
     )
     return {

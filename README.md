@@ -91,7 +91,7 @@ python3 -m grid07_ai_agent.cli config-check
 python3 -m grid07_ai_agent.cli gemini-smoke-test
 ```
 
-`gemini-smoke-test` makes one tiny request with `max_output_tokens=3`; use it only when you intentionally want to test the key.
+`gemini-smoke-test` makes one tiny request with `max_output_tokens=3` and `thinking_budget=0`; use it only when you intentionally want to test the key.
 
 ## Test
 
