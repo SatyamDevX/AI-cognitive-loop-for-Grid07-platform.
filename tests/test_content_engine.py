@@ -2,10 +2,12 @@ import json
 import unittest
 
 from grid07_ai_agent.content_engine import (
+    generate_live_opinionated_post,
     generate_opinionated_post,
     generate_opinionated_post_json,
     mock_searxng_search,
 )
+from grid07_ai_agent.config import AppConfig
 
 
 def invoke_tool(tool, query: str) -> str:
@@ -35,6 +37,10 @@ class ContentEngineTest(unittest.TestCase):
         self.assertEqual(payload["bot_id"], "bot_c")
         self.assertIsInstance(payload["topic"], str)
         self.assertIsInstance(payload["post_content"], str)
+
+    def test_live_generation_requires_supported_provider(self) -> None:
+        with self.assertRaisesRegex(ValueError, "Only LLM_PROVIDER=gemini"):
+            generate_live_opinionated_post("bot_a", AppConfig(llm_provider="local"))
 
 
 if __name__ == "__main__":

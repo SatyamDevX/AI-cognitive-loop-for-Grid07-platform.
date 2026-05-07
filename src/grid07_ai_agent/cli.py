@@ -8,7 +8,7 @@ import json
 from grid07_ai_agent.config import config_status, load_config
 from grid07_ai_agent.llm import describe_llm_provider, run_gemini_smoke_test
 from grid07_ai_agent.router import route_post_to_bots
-from grid07_ai_agent.content_engine import generate_opinionated_post
+from grid07_ai_agent.content_engine import generate_live_opinionated_post, generate_opinionated_post
 from grid07_ai_agent.personas import find_persona_by_id
 from grid07_ai_agent.thread_defense import generate_defense_reply
 
@@ -23,6 +23,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     post_parser = subparsers.add_parser("generate-post", help="Generate a bot post")
     post_parser.add_argument("bot_id", choices=["bot_a", "bot_b", "bot_c"])
+
+    live_post_parser = subparsers.add_parser(
+        "generate-live-post",
+        help="Generate a bot post using the configured live LLM provider",
+    )
+    live_post_parser.add_argument("bot_id", choices=["bot_a", "bot_b", "bot_c"])
+    live_post_parser.add_argument("--model", default="gemini-2.5-flash")
 
     defense_parser = subparsers.add_parser("defend-thread", help="Run Phase 3 defense demo")
     defense_parser.add_argument("bot_id", choices=["bot_a", "bot_b", "bot_c"])
@@ -52,6 +59,13 @@ def main() -> None:
         print(json.dumps(payload, indent=2))
     elif args.command == "generate-post":
         print(json.dumps(generate_opinionated_post(args.bot_id), indent=2))
+    elif args.command == "generate-live-post":
+        print(
+            json.dumps(
+                generate_live_opinionated_post(args.bot_id, load_config(), model=args.model),
+                indent=2,
+            )
+        )
     elif args.command == "defend-thread":
         parent_post = "Electric Vehicles are a complete scam. The batteries degrade in 3 years."
         comment_history = [

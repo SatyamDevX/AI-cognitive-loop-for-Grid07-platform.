@@ -213,3 +213,45 @@ Ran 12 tests in 0.017s
 
 OK
 ```
+
+## Milestone 5: Live Gemini Content Generation
+
+Offline command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m grid07_ai_agent.cli generate-post bot_a
+```
+
+Output:
+
+```json
+{
+  "bot_id": "bot_a",
+  "topic": "AI coding acceleration",
+  "post_content": "OpenAI shipping faster coding models is exactly the compounding curve. Junior dev workflows will evolve, not vanish. More leverage, more builders, more future. Context: OpenAI releases a faster coding model as companies rethink junior developer workflows."
+}
+```
+
+Manual live command, run only when `.env` has `LLM_PROVIDER=gemini` and `GEMINI_API_KEY`:
+
+```bash
+python3 -m grid07_ai_agent.cli generate-live-post bot_b
+```
+
+The live command makes one Gemini request with JSON mode, `max_output_tokens=120`, and `thinking_budget=0`.
+
+Test command:
+
+```powershell
+$env:PYTHONPATH='D:\AI_Agents\1rag_ai_agent\src'
+python -m unittest discover -s tests
+```
+
+Result:
+
+```text
+Ran 16 tests in 0.020s
+
+OK
+```

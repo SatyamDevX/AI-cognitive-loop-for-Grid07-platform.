@@ -54,6 +54,14 @@ python -m grid07_ai_agent.cli generate-post bot_b
 
 The content engine has three nodes: `Decide Search`, `Web Search`, and `Draft Post`. It uses LangGraph when installed; otherwise it runs the same nodes through a local sequential graph runner so tests and demos remain deterministic.
 
+Live Gemini drafting, only when `.env` is configured:
+
+```bash
+python3 -m grid07_ai_agent.cli generate-live-post bot_b
+```
+
+This command makes one Gemini request with JSON mode, `max_output_tokens=120`, and `thinking_budget=0`.
+
 ## Run Phase 3
 
 ```powershell
@@ -105,6 +113,7 @@ python -m unittest discover -s tests
 - The embedding model is deterministic and local for Milestone 1. It uses a small domain-weighted vocabulary for the assignment personas, which gives stable tests and a clear upgrade path to OpenAI, Ollama, Groq, ChromaDB, FAISS, or pgvector.
 - Public APIs are kept narrow: `route_post_to_bots(post_content: str, threshold: float = 0.85)` is the main assignment function.
 - Phase 2 exposes `generate_opinionated_post(bot_id: str)` and validates the required JSON keys: `bot_id`, `topic`, and `post_content`.
+- Live Phase 2 drafting is explicit through `generate-live-post`; regular tests and demos do not hit external APIs.
 - Phase 3 exposes `generate_defense_reply(...)` and `build_defense_prompt(...)` for future LLM-backed replies.
 - Runtime config is loaded from `.env` when available and can be inspected with `config-check` without exposing secrets. Gemini uses the official `google-genai` SDK.
 - Tests use Python `unittest` so the first milestone can run without installing a test framework.

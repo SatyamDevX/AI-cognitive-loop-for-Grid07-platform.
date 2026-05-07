@@ -6,6 +6,8 @@ import json
 from dataclasses import asdict, dataclass
 from typing import Any, Callable, TypedDict
 
+from grid07_ai_agent.config import AppConfig
+from grid07_ai_agent.llm import generate_gemini_post
 from grid07_ai_agent.personas import BotPersona, find_persona_by_id
 
 try:
@@ -160,6 +162,27 @@ def generate_opinionated_post_json(bot_id: str) -> str:
     """Return the generated post as strict JSON text."""
 
     return json.dumps(generate_opinionated_post(bot_id), indent=2)
+
+
+def generate_live_opinionated_post(
+    bot_id: str,
+    config: AppConfig,
+    model: str = "gemini-2.5-flash",
+) -> dict[str, str]:
+    """Run search nodes locally, then draft through the configured live LLM."""
+
+    state = run_web_search(decide_search({"bot": find_persona(bot_id)}))
+    if config.llm_provider != "gemini":
+        raise ValueError("Only LLM_PROVIDER=gemini is implemented for live generation.")
+    output = generate_gemini_post(
+        config=config,
+        bot=state["bot"],
+        topic=state["topic"],
+        search_results=state["search_results"],
+        model=model,
+    )
+    _validate_generated_post(output)
+    return output
 
 
 def _validate_generated_post(output: dict[str, str]) -> None:

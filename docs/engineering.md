@@ -86,6 +86,8 @@ Validation:
 
 Status: complete. The implementation uses LangGraph when installed and a local sequential runner when optional LangGraph dependencies are not available in the current environment.
 
+Update: live Gemini drafting is available through an explicit CLI command. The deterministic command remains the default for tests and local demos.
+
 ### Milestone 3: Deep Thread RAG + Injection Defense
 
 Deliverables:
