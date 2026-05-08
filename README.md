@@ -74,15 +74,15 @@ The defense workflow builds a RAG-style prompt with the parent post, comment his
 
 AI agent bots configured correctly and some highlights:
 
-![Agent Post creation ](assets\AI_agent_is_able_to_post_content_terminal_test.jpg)
+![Agent Post creation ](assets/AI_agent_is_able_to_post_content_terminal_test.jpg)
 
 Rounting flow:
 
-![Bots automatic rounting](assets\bot_rounting_testing_on_terminal.jpg)
+![Bots automatic rounting](assets/bot_rounting_testing_on_terminal.jpg)
 
 Post creation:
 
-![Post creation](assets\post_content_terminal_test_screenshot.jpg)
+![Post creation](assets/post_content_terminal_test_screenshot.jpg)
 
 ## Check Config
 
