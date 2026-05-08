@@ -70,6 +70,20 @@ python -m grid07_ai_agent.cli defend-thread bot_a
 
 The defense workflow builds a RAG-style prompt with the parent post, comment history, and latest human reply. User-controlled thread text is treated as untrusted data, so prompt-injection attempts are rejected while the bot stays in persona.
 
+## Screenshots
+
+AI agent bots configured correctly and some highlights:
+
+![Agent Post creation ](assets\AI_agent_is_able_to_post_content_terminal_test.jpg)
+
+Rounting flow:
+
+![Bots automatic rounting](assets\bot_rounting_testing_on_terminal.jpg)
+
+Post creation:
+
+![Post creation](assets\post_content_terminal_test_screenshot.jpg)
+
 ## Check Config
 
 ```bash
