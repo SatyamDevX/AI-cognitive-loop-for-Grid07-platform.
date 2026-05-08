@@ -133,7 +133,7 @@ class ConfigTest(unittest.TestCase):
         self.assertTrue(captured["api_key_set"])
         self.assertEqual(captured["thinking_budget"], 0)
         self.assertEqual(captured["generate_config"]["response_mime_type"], "application/json")
-        self.assertEqual(captured["generate_config"]["max_output_tokens"], 90)
+        self.assertEqual(captured["generate_config"]["max_output_tokens"], 120)
 
     def test_gemini_post_generation_trims_long_post_content(self) -> None:
         captured = {}

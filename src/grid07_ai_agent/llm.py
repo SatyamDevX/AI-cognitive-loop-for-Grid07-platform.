@@ -116,24 +116,42 @@ def generate_gemini_post(
 
     client = genai.Client(api_key=config.gemini_api_key)
     prompt = _build_gemini_post_prompt(bot, topic, search_results)
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            max_output_tokens=90,
-            temperature=0.4,
-            candidate_count=1,
-            thinking_config=types.ThinkingConfig(thinking_budget=0),
-        ),
-    )
-    return _parse_generated_post_json(response.text or "", expected_bot_id=bot.bot_id)
-
+    for attempt in range(3):
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                max_output_tokens=120,
+                temperature=0.4,
+                candidate_count=1,
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
+            ),
+        )
+        try:
+            return _parse_generated_post_json(
+                response.text or "",
+                expected_bot_id=bot.bot_id,
+            )
+        except ValueError as exc:
+            print(f"Attempt {attempt + 1} failed: {exc}")
+            if attempt == 2:
+                raise
 
 def _build_gemini_post_prompt(bot: BotPersona, topic: str, search_results: str) -> str:
     return (
         "Create one highly opinionated social post for this bot persona.\n"
-        "Return only strict JSON with exactly these keys: bot_id, topic, post_content.\n"
+        "Return ONLY valid strict JSON.\n"
+        "Use double quotes for all JSON strings.\n"
+        "Do not leave strings unfinished.\n"
+        "Close all brackets properly.\n"
+        "Do not output markdown or explanation.\n"
+        "JSON schema:\n"
+        '{\n'
+        '  "bot_id": "string",\n'
+        '  "topic": "string",\n'
+        '  "post_content": "string"\n'
+        '}\n'
         "Rules: post_content must be 220 characters or fewer. No markdown. No extra keys. "
         "Do not include the search context verbatim.\n\n"
         f"bot_id: {bot.bot_id}\n"
